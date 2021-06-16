@@ -5,9 +5,9 @@ require_relative "../app/app"
 module AcnhBot
   module Events
     def ready
-      $client.ready do
+      AcnhBot.client.ready do
         AcnhBot::CONSOLE_LOGGER.info("Client login")
-        $client.game = "Ruby <3"
+        AcnhBot.client.game = "#{AcnhBot.client.config[:prefix]}help <3"
       end
     end
     module_function :ready

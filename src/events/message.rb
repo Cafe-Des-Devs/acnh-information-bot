@@ -5,9 +5,9 @@ require_relative "../app/app"
 module AcnhBot
   module Events
     def message
-      $client.message(:start_with => $client.config[:prefix]) do |event|
-        args = event.content.slice($client.config[:prefix].size, event.content.size).split(" ")
-        next unless event.content.start_with?($client.config[:prefix])
+      AcnhBot.client.message(:start_with => AcnhBot.client.config[:prefix]) do |event|
+        args = event.content.slice(AcnhBot.client.config[:prefix].size, event.content.size).split(" ")
+        next unless event.content.start_with?(AcnhBot.client.config[:prefix])
 
         name = args.shift
 
@@ -48,7 +48,7 @@ module AcnhBot
 
             matched_errors << :client_permissions unless verified_perm_bot.empty?
 
-            matched_errors << :owner if command.owner_only && !Utils.is_authorized?(event.author.id)
+            matched_errors << :owner if command.owner_only && !Utils.authorized?(event.author.id)
 
             matched_errors << :args if command.args && args.empty? && command.strict_args
 

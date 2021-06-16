@@ -8,8 +8,8 @@ module AcnhBot
       Command.new({
                     :name => :help,
                     :aliases => "h",
-                    :description => "Affiche le panel d'aide",
-                    :args => ["[commande]"],
+                    :description => "Get the help panel",
+                    :args => ["[command]"],
                     :use_example => :default,
                     :required_permissions => :default,
                     :required_bot_permissions => :default,
@@ -19,16 +19,16 @@ module AcnhBot
           command = Utils.get_command(tools[:args][0])
           command_aliases = if command.aliases.instance_of?(Array)
                               if command.aliases.empty?
-                                "aucun"
+                                "no"
                               else
-                                (command.aliases.map { |a| "#{$client.config[:prefix]}#{a}" }).join("\n")
+                                (command.aliases.map { |a| "#{AcnhBot.client.config[:prefix]}#{a}" }).join("\n")
                               end
                             elsif command.aliases.instance_of?(String)
-                              "#{$client.config[:prefix]}#{command.aliases}"
+                              "#{AcnhBot.client.config[:prefix]}#{command.aliases}"
                             end
 
           command_args = if command.args
-                           command.args.map { |arg| "#{$client.config[:prefix]}#{command.name} #{arg}" }.join("\n")
+                           command.args.map { |arg| "#{AcnhBot.client.config[:prefix]}#{command.name} #{arg}" }.join("\n")
                          else false end
           required_permissions = if command.required_permissions && !command.required_permissions.empty?
                                    command.required_permissions.map { |perm| perm.to_s.upcase }.join(", ")
@@ -40,11 +40,11 @@ module AcnhBot
 
           fields = [
             {
-              :name => "• Nom",
+              :name => "• Name",
               :value => command.name
             },
             {
-              :name => "• Alias",
+              :name => "• Aliases",
               :value => command_aliases
             },
             {
@@ -52,23 +52,23 @@ module AcnhBot
               :value => command.description
             },
             {
-              :name => "• Arguments",
+              :name => "• Args",
               :value => command_args || "aucun"
             },
             {
-              :name => "• Exemple",
-              :value => "#{$client.config[:prefix]}#{command.name} #{command.use_example}"
+              :name => "• Example",
+              :value => "#{AcnhBot.client.config[:prefix]}#{command.name} #{command.use_example}"
             },
             {
-              :name => "• Catégorie",
+              :name => "• Category",
               :value => Utils.display(command.category.to_s)
             },
             {
-              :name => "• Permissions utilisateur requises",
+              :name => "• Required permissions",
               :value => Utils.display(required_permissions || "aucune")
             },
             {
-              :name => "• Permissions bot requises",
+              :name => "• Required bot permissions",
               :value => Utils.display(required_bot_permissions || "aucune")
             }
           ]
@@ -77,12 +77,12 @@ module AcnhBot
             Utils.add_fields(embed, fields, true)
           end
         elsif tools[:args][0] && !AcnhBot::Utils.get_command(tools[:args][0], { :boolean => true })
-          event.respond "La commande n'a pas été trouvée. Veuillez réessayer."
+          event.respond "The command hasn't being found. Try again"
         else
           fields = []
           categories = []
 
-          $client.commands.each do |props|
+          AcnhBot.client.commands.each do |props|
             categories << props.category.upcase unless categories.include?(props.category)
             categories -= %w[TESTS OWNER]
           end
@@ -90,14 +90,14 @@ module AcnhBot
           categories.each do |category|
             fields << {
               :name => "• #{Utils.display(category.to_s)}",
-              :value => $client.commands.filter { |cmd| cmd.category.upcase == category }.map(&:name).join(", ")
+              :value => AcnhBot.client.commands.filter { |cmd| cmd.category.upcase == category }.map(&:name).join(", ")
             }
           end
 
           event.channel.send_embed do |embed|
             Utils.build_embed(embed, event.message)
             Utils.add_fields(embed, fields, false)
-            embed.title = "Liste des commandes disponibles"
+            embed.title = "List of available commands."
           end
         end
       end
