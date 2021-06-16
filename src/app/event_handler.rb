@@ -9,7 +9,7 @@ module AcnhBot
       events = []
       dir = Dir.entries("src/events/")
       dir.each do |file|
-        next if %w(. ..).include?(file)
+        next if %w[. ..].include?(file)
 
         load "src/events/#{file}"
         events << File.basename(file, ".rb")

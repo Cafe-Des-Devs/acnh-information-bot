@@ -18,16 +18,16 @@ module AcnhBot
       @props = props
       @run = run
       @props = load_attributes
-      {
+      Hash[
         :props => load_attributes,
         :run => @run
-      }
+      ]
     end
 
     # Load command's attributes
     # @return [Object] the attributes
-    private def load_attributes
-      Command.attr_accessor :name, :aliases, :description, :args, :strict_args, :use_example, :required_permissions, :required_bot_permissions, :category, :owner_only
+    def load_attributes
+      Command.attr_accessor :name, :aliases, :description, :args, :strict_args, :use_example, :required_permissions, :required_bot_permissions, :category, :owner_only, :ascii_only_args
       @name = @props[:name] if @props[:name]
 
       @props[:aliases] ||= :default
@@ -96,6 +96,9 @@ module AcnhBot
                     end
 
       @owner_only = true if @category.upcase.match(/OWNER|TEST/)
+      @ascii_only_args = if @props[:ascii_only_args]
+                           true
+                         else false end
 
       Hash[
         :name => @name,
@@ -107,8 +110,10 @@ module AcnhBot
         :required_bot_permissions => @required_bot_permissions,
         :use_example => @use_example,
         :category => @category,
-        :owner_only => @owner_only
+        :owner_only => @owner_only,
+        :ascii_only_args => @ascii_only_args
       ]
     end
+    private :load_attributes
   end
 end
