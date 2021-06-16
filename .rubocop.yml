@@ -22,5 +22,17 @@ Layout/EndOfLine:
 Metrics/ModuleLength:
   Enabled: false
 
+Metrics/MethodLength:
+  Enabled: false
+
 Lint/RedundantStringCoercion:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metris/AbcSize:
   Enabled: false

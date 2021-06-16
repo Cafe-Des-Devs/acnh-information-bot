@@ -10,4 +10,4 @@ gem "yaml", "~> 0.1.1"
 
 gem "rubocop", "~> 1.16"
 
-gem "acnh_informations", "~> 0.1.1"
+gem "acnh_informations", "~> 0.1.2"

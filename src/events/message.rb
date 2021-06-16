@@ -20,22 +20,18 @@ module AcnhBot
               :user => lambda {
                 missing = []
                 command.required_permissions.each do |usr_p|
-                  if event.author.permission?(usr_p)
-                    next
-                  else
-                    missing << usr_p
-                  end
+                  next if event.author.permission?(usr_p)
+
+                  missing << usr_p
                 end
                 missing
               },
               :client => lambda {
                 missing = []
                 command.required_bot_permissions.each do |bot_p|
-                  if event.server.bot.permission?(bot_p)
-                    next
-                  else
-                    missing << bot_p
-                  end
+                  next if event.server.bot.permission?(bot_p)
+
+                  missing << bot_p
                 end
                 missing
               }
@@ -52,22 +48,25 @@ module AcnhBot
 
             matched_errors << :args if command.args && args.empty? && command.strict_args
 
+            matched_errors << :ascii_only_args if command.ascii_only_args && !event.content.ascii_only?
+
             if matched_errors.empty?
               command.run.call(event, { :args => args })
             else
               matchs = {
-                :client_permissions => "• Il me manque l#{verified_perm_bot.size > 1 ? "es" : "a"} permission#{verified_perm_bot.size > 1 ? "es" : "a"} suivante#{verified_perm_bot.size > 1 ? "s" : ""} : #{verified_perm_bot.map do |perm|
-                                                                                                                                                                                                               Utils.display(perm.to_s)
-                                                                                                                                                                                                             end.join(", ")}",
-                :user_permissions => "• Il vous manque l#{verified_perm_user.size > 1 ? "es" : "a"} permission#{verified_perm_user.size > 1 ? "es" : "a"} suivante#{verified_perm_user.size > 1 ? "s" : ""} : #{verified_perm_user.map do |perm|
-                                                                                                                                                                                                                  Utils.display(perm.to_s)
-                                                                                                                                                                                                                end.join(", ")}",
-                :owner => "• Vous devez être un propriétaire du bot pour exécuter cette commande.",
-                :args => "• Vous devez préciser des arguments (#{command.args[0]})."
+                :client_permissions => "• I'm missing to l#{verified_perm_bot.size > 1 ? "es" : "a"} permission#{verified_perm_bot.size > 1 ? "es" : "a"} suivante#{verified_perm_bot.size > 1 ? "s" : ""} : #{verified_perm_bot.map do |perm|
+                                                                                                                                                                                                                 Utils.display(perm.to_s)
+                                                                                                                                                                                                               end.join(", ")}",
+                :user_permissions => "• You are missing to l#{verified_perm_user.size > 1 ? "es" : "a"} permission#{verified_perm_user.size > 1 ? "es" : "a"} suivante#{verified_perm_user.size > 1 ? "s" : ""} : #{verified_perm_user.map do |perm|
+                                                                                                                                                                                                                      Utils.display(perm.to_s)
+                                                                                                                                                                                                                    end.join(", ")}",
+                :owner => "• You have to being an owner to execute that.",
+                :args => "• You have to precise args (#{command.args[0]}).",
+                :ascii_only_args => "• Your message contain non-ascii character. (that's not expected in this command)"
               }
               event.channel.send_embed do |embed|
                 embed.description = [
-                  "**Liste des problèmes (#{matched_errors.size})**",
+                  "**Problem's list (#{matched_errors.size})**",
                   matched_errors.map { |match| matchs[match] }.join("\n")
                 ].join("\n")
               end
