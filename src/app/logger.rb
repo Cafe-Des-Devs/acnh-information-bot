@@ -49,7 +49,7 @@ module AcnhBot
 
     MODES.each do |key, value|
       # Create the color's methods
-      # @param message [StringIO] the message to print
+      # @param message [String] the message to print
       define_method(key) do |message|
         return Logger.new(:console).warn("The console logs aren't available on #{@mode} mode") if @mode != :console
 

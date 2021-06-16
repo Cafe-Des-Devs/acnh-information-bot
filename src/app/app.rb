@@ -3,6 +3,7 @@
 require "discordrb"
 require "json"
 require "yaml"
+require "acnh_informations"
 require_relative "bot"
 require_relative "logger"
 require_relative "error"
@@ -11,14 +12,23 @@ require_relative "event_handler"
 require_relative "command"
 require_relative "utils"
 require_relative "date"
-require_relative "animal_crossing"
 
+# The base module
 module AcnhBot
   include Discordrb
   include JSON
   include YAML
+  include AcnhInformations
   CONSOLE_LOGGER = Logger.new(:console)
   FILE_LOGGER = Logger.new(:file)
 end
 
-$client = AcnhBot::Client.new(YAML.load_file("src/private/config.yml")[:token]).client
+module AcnhBot
+  APPLICATION = AcnhBot::Client.new(YAML.load_file("src/private/config.yml")[:token])
+
+  ##
+  # get the client
+  def self.client
+    APPLICATION.client
+  end
+end

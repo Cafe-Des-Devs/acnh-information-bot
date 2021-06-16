@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
 module AcnhBot
-  class StoneFreeError < NameError
+  class AcnhError < StandardError
   end
 end

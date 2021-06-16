@@ -21,41 +21,41 @@ module AcnhBot
     # If a user has admin permissions
     # @param id [Integer] The user ID
     # @return [Boolean] if user is admin or not
-    def is_authorized?(id)
-      $client.config[:authorized].include?(id.to_i)
+    def authorized?(id)
+      AcnhBot.client.config[:authorized].include?(id.to_i)
     end
 
     # Build the embed's body
-    # @param e [Discordrb::Webhooks::Embed] the embed to build
+    # @param embed [Discordrb::Webhooks::Embed] the embed to build
     # @return [Discordrb::Webhooks::Embed] the built embed
-    def build_embed(e = Discordrb::Webhooks::Embed.new, message = nil)
-      e.title = $client.bot_app.name
-      e.timestamp = Time.at(Time.now.to_i)
+    def build_embed(embed = Discordrb::Webhooks::Embed.new, message = nil)
+      embed.title = AcnhBot.client.bot_app.name
+      embed.timestamp = Time.at(Time.now.to_i)
       if message
-        e.footer = Discordrb::Webhooks::EmbedFooter.new(:text => "Demandé par #{message.author.name}",
+        embed.footer = Discordrb::Webhooks::EmbedFooter.new(:text => "Demandé par #{message.author.name}",
                                                         :icon_url => message.author.avatar_url)
       end
-      e
+      embed
     end
 
     # Add some fields to an embed
-    # @param e [Discordrb::Webhooks::Embed] the embed to build
+    # @param embed [Discordrb::Webhooks::Embed] the embed to build
     # @param fields [Object] The fields to add
     # @param inline [Boolean] if the fields ar inlined
-    # @return [Discordrb::Webhooks::Embed] the built embed
-    def add_fields(embed = Discordrb::Webhooks::Embed.new, fields, inline)
+    # @return [Discordrb::Webhooks::Embed, Boolean] the built embed
+    def add_fields(fields, inline, embed = Discordrb::Webhooks::Embed.new)
       if fields.respond_to?(:each)
         fields.each do |field|
           embed.add_field(:name => field[:name].to_s, :value => field[:value].to_s, :inline => !inline.nil?)
-          embed
         end
+        embed
       else false end
     end
 
     # Get a command by name
     # @param command_name [StringIO] the name of the command
     # @param props [Object] The props to return a command
-    # @return [Method] call the method and get the command object
+    # @return [Method, Boolean] call the method and get the command object
     def get_command(command_name, props = { :boolean => false })
       if props[:boolean]
         return true if AcnhBot::Commands.respond_to?(command_name)
@@ -103,14 +103,14 @@ module AcnhBot
         elsif !message_event.channel.server.channels.filter { |chn| chn.name.match(/#{tools[:args].join(" ")}/) }.empty?
           message_event.server.channels.filter { |chn| chn.name.match(/#{tools[:args].join(" ")}/) }.first
         else
-          "not_found"
+          :not_found
         end
       else false end
     end
 
-    alias is_owner? is_authorized?
+    alias is_owner? authorized?
     alias find_command get_command
-    module_function :is_authorized?,
+    module_function :authorized?,
                     :is_owner?,
                     :build_embed,
                     :get_command,
@@ -136,7 +136,7 @@ end
 #
 #     if command_props[:required_bot_permissions]
 #       command_props[:required_bot_permissions].each do |permission|
-#         bot_member = get_member(tools: { :args => $client.bot_application.id.to_s.split(" ") }, message_event: message_event)
+#         bot_member = get_member(tools: { :args => AcnhBot.client.bot_application.id.to_s.split(" ") }, message_event: message_event)
 #         unless for_permission(bot_member, message_event.channel, permission)
 #           client_missing_permissions << permission
 #         end

@@ -10,7 +10,7 @@ module AcnhBot
     attr_reader :client, :data
 
     # Create the Client
-    # @param token [StringIO] the client's token
+    # @param token [String] the client's token
     # Load the client's attributes
     def initialize(token)
       # Add the commands and config attributes to the discordrb bot

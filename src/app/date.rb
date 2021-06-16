@@ -3,6 +3,7 @@
 require_relative "app"
 
 module AcnhBot
+  # Manage dates from bot
   class Date
     MATCH_FORMAT = /YYYY|MMMM|mmmm|DDDD|dddd|YY|MM|DD|HH|mm|ss/.freeze
     MATCH_DURATION = /&t|&mm|&hh|&jj|&MM|&yy/.freeze
