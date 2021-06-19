@@ -5,7 +5,6 @@
 require_relative "app/app"
 
 cmds = AcnhBot::CommandHandler.load_commands
-AcnhBot.client.commands = []
 
 cmds.each do |cmd|
   AcnhBot.client.commands << AcnhBot::Commands.method(cmd).call if AcnhBot::Commands.respond_to?(cmd)

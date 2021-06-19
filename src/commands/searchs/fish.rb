@@ -8,7 +8,7 @@ module AcnhBot
       Command.new({
                     :name => :fish,
                     :aliases => "poisson",
-                    :description => "Give informations about the fish",
+                    :description => "Give informations about a fish",
                     :args => ["<fish name/ fish id>"],
                     :use_example => "bitterling",
                     :required_permissions => :default,
@@ -31,7 +31,7 @@ module AcnhBot
         fields = [
           {
             :name => "• Name",
-            :value => "__Anglais__ : #{Utils.display(fish[:name][:"name-EUes"])}"
+            :value => Utils.display(fish[:name][:"name-USen"])
           },
           {
             :name => "• Id",
@@ -70,6 +70,6 @@ module AcnhBot
       end
     end
     alias poisson fish
-    module_function :fish
+    module_function :fish, :poisson
   end
 end
