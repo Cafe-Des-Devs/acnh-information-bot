@@ -18,7 +18,7 @@ module AcnhBot
                   }) do |event, tools|
         sea = if AcnhInformations::Api.valid?(:fish, tools[:args][0])
                 AcnhInformations::Api.scrape(:fish, tools[:args][0])
-              elsif AcnhInformations::Api.get_by_name(:fossils, tools[:args].join(" "))
+              elsif AcnhInformations::Api.get_by_name(:fish, tools[:args].join(" "))
                 AcnhInformations::Api.get_by_name(:fish, tools[:args].join(" "))
               else false end
         next event.respond "Your sea isn't valid. Try again." unless sea

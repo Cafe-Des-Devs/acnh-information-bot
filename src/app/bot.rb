@@ -22,7 +22,7 @@ module AcnhBot
       Thread.new do
         puts "Type '.exit' to exit"
         loop do
-          next unless $stdin.gets.chomp == ".exit"
+          next unless $stdin.gets.chomp.downcase == ".exit"
 
           exit
         end

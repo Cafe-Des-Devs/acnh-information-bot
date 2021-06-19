@@ -16,7 +16,7 @@ module AcnhBot
                     :strict_args => true,
                     :ascii_only_args => false
                   }) do |event, tools|
-        next event.respond "The available categories are #{AcnhInformations::Api::CATEGORIES.map { |c| "`#{c}`" }.join(", ")}" if tools[:args][0] == "available"
+        next event.respond "The available categories are #{(AcnhInformations::Api::CATEGORIES - %w[icons images music houseware]).map { |c| "`#{c}`" }.join(", ")}" if tools[:args][0] == "available"
 
         listed = AcnhInformations::Api.scrape(tools[:args][0]) || false
         number = 0

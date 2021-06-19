@@ -6,7 +6,7 @@ module AcnhBot
   module Commands
     def test
       AcnhBot::Command.new({ :name => :test }) do |event, _tools|
-        event.respond AcnhInformations::Api.get_by_name(:fish, "bouvière").to_s
+        attachment = Discordrb::Attachment.new(URI.parse("https://acnhapi.com/v1/hourly/1"), event.message, AcnhBot.client)
       end
     end
     module_function :test
