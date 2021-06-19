@@ -41,7 +41,12 @@ module AcnhBot
                    end
       end
       @description = @props[:description].to_s if @props[:description]
-      @args = @props[:args].to_a if @props[:args]
+      @args =  if @props[:args].instance_of?(Array)
+                 @props[:args]
+               elsif @props[:args].instance_of?(String)
+                 @args = [@props[:args]]
+               else @args = [] end
+
       @strict_args = true if @props[:strict_args]
       @use_example = @props[:use_example] if @props[:use_example]
 

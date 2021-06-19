@@ -12,7 +12,7 @@ module AcnhBot
         next if %w[. ..].include?(dir)
 
         Dir.entries("src/commands/#{dir}").each do |file|
-                    next if %w[. ..].include?(file)
+          next if %w[. ..].include?(file)
 
           load "src/commands/#{dir}/#{file}"
           commands << File.basename(file, ".rb")

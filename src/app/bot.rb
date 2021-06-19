@@ -18,6 +18,7 @@ module AcnhBot
       @client = Discordrb::Bot.new(:token => token, :ignore_bots => true)
       @data = YAML.load_file("src/private/config.yml")
       @client.config = @data
+      @client.commands = []
       Thread.new do
         puts "Type '.exit' to exit"
         loop do
