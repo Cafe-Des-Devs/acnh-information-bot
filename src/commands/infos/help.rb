@@ -65,11 +65,11 @@ module AcnhBot
             },
             {
               :name => "• Required permissions",
-              :value => Utils.display(required_permissions || "aucune")
+              :value => Utils.display(required_permissions || "no")
             },
             {
               :name => "• Required bot permissions",
-              :value => Utils.display(required_bot_permissions || "aucune")
+              :value => Utils.display(required_bot_permissions || "no")
             }
           ]
           event.channel.send_embed do |embed|

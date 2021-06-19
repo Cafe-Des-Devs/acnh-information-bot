@@ -8,14 +8,16 @@ module AcnhBot
       Command.new({
                     :name => :list,
                     :description => "Get the list of a category.",
-                    :args => "<category>",
-                    :use_example => :default,
+                    :args => %w[<category> <available>],
+                    :use_example => "fish",
                     :required_permissions => :default,
                     :required_bot_permissions => :default,
                     :category => :default,
                     :strict_args => true,
                     :ascii_only_args => false
                   }) do |event, tools|
+        next event.respond "The available categories are #{AcnhInformations::Api::CATEGORIES.map { |c| "`#{c}`" }.join(", ")}" if tools[:args][0] == "available"
+
         listed = AcnhInformations::Api.scrape(tools[:args][0]) || false
         number = 0
         page = 0

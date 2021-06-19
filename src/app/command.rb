@@ -80,7 +80,7 @@ module AcnhBot
 
       @category = @props[:category] || :default
 
-      @use_example = "#{AcnhBot.client.config[:prefix]}#{@name}" if @use_example == :default
+      @use_example = "" if @use_example == :default
       @required_permissions = [] if @required_permissions == :default
 
       if (@category == :default) || !@category
