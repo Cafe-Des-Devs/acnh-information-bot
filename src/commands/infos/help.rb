@@ -74,7 +74,7 @@ module AcnhBot
           ]
           event.channel.send_embed do |embed|
             Utils.build_embed(embed, event.message)
-            Utils.add_fields(embed, fields, true)
+            Utils.add_fields(fields, false, embed)
           end
         elsif tools[:args][0] && !AcnhBot::Utils.get_command(tools[:args][0], { :boolean => true })
           event.respond "The command hasn't being found. Try again"
@@ -96,7 +96,7 @@ module AcnhBot
 
           event.channel.send_embed do |embed|
             Utils.build_embed(embed, event.message)
-            Utils.add_fields(embed, fields, false)
+            Utils.add_fields(fields, false, embed)
             embed.title = "List of available commands."
           end
         end
